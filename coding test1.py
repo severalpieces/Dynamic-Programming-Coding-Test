@@ -11,8 +11,8 @@ def check_raw_input(raw_input):
         raise ValueError("Sorry! You must enter exactly two values.")
     
     # check if the inputs are digits
-    if not all(item.isdigit() and int(item)>=0 for item in inputs):
-        raise ValueError("Sorry! Both inputs must be non-negative integers.")
+    if not all(item.isdigit() and int(item)>=1 for item in inputs):
+        raise ValueError("Sorry! Inputs must be positive integers.")
     
     return map(int, inputs)
     
@@ -24,11 +24,6 @@ def main():
         # read and check the first line of input for n_cargo and max_mass
         raw_input = input()
         n_cargo, max_mass = check_raw_input(raw_input)
-        
-        # edge case 1: when n_cargo or max_mass is 0
-        if n_cargo == 0 or max_mass==0:
-            print(0)
-            return
         
         # check if the inputs for n_cargo and max_mass satisfy their constraints
         if not (n_cargo <= 1000):
@@ -44,13 +39,14 @@ def main():
             raw_input = input()
             mass, value = check_raw_input(raw_input)
             
+            # check if the mass and value of each sample match their constraints
+            if not (mass <= max_mass):
+                raise ValueError(f"Oops! This sample is even heavier than the maximum mass {max_mass}.")
+            if not (value <= 1000):
+                raise ValueError("Oops! I think the value of sample cannot exceed 1000.")
+            
             masses.append(mass)
             values.append(value)
-        
-        # edge case 2: all of the masses exceed max_mass
-        if all(mass > max_mass for mass in masses):
-            print(0)
-            return
         
         # create a 2D list for memoization
         memo = [[-1 for _ in range(max_mass + 1)] for _ in range(n_cargo + 1)]
